@@ -106,6 +106,8 @@ web_modules/
 # Optional eslint cache
 .eslintcache
 
+
+
 # Optional stylelint cache
 .stylelintcache
 
@@ -218,3 +220,6 @@ $RECYCLE.BIN/
 
 # Environment variables
 .env
+
+# Uploads directory
+uploads/
