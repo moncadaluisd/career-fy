@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { APPLY_STATUS } from '../config/constants.js';
 
 const applySchema = new mongoose.Schema({
   url: {
@@ -16,22 +17,27 @@ const applySchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
+    default: APPLY_STATUS.PENDING,
   },
   tags: {
     type: [String],
-    required: true,
+    required: false,
   },
   location: {
     type: String,
+    required: false,
   },
   typeWork: {
     type: String,
+    required: false,
   },
   salary: {
     type: String,
+    required: false,
   },
   company: {
     type: String,
+    required: false,
   },
   createdAt: {
     type: Date,

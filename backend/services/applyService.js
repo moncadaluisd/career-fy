@@ -12,12 +12,17 @@ import { scrappingService } from './scrappingService.js';
  */
 const ApplyCreateService = async (url) => {
   const html = await scrappingService(url);
-
   const text = await openaiService(analyzingHtml(html));
-
   const json = parseToJson(text);
 
   if (!json) {
+    throw new Error('Error parsing to json');
+  }
+
+  if (
+    !json.name ||
+    !json.description
+  ) {
     throw new Error('Error parsing to json');
   }
 
@@ -85,7 +90,6 @@ const updateApplyService = async (id, body) => {
   if (!apply) {
     throw new Error('Apply not found');
   }
-
 
   apply.status = body.status;
   await apply.save();
