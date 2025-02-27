@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator';
 import { handleApi, handleApiError } from '../middleware/handleApi.js';
 import {
-  ApplyCreateService,
+  ApplyCreateByUrlService,
   deleteApplyService,
   getAllAppliesService,
   getApplyService,
@@ -24,7 +24,7 @@ const createApply = async (req, res, next) => {
 
     const { url } = req.body;
 
-    const json = await ApplyCreateService(url);
+    const json = await ApplyCreateByUrlService(url);
 
     return handleApi(res, json, 200, 'Apply created successfully');
   } catch (error) {

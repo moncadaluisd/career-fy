@@ -12,20 +12,35 @@ import { openaiService } from './openaiService.js';
  * @param {string} applyId - The id of the apply
  * @returns {Promise<Coverletter>} The created coverletter
  */
-const createCoverletterService = async (applyId, curriculumId, isShort = false) => {
-
+const createCoverletterService = async (
+  applyId,
+  curriculumId,
+  isShort = false,
+) => {
   const apply = await getApplyService(applyId);
 
   const curriculum = await getCurriculumService(curriculumId);
 
+  const coverletters = await getCoverLetterVersionService(
+    applyId,
+    curriculumId,
+  );
+
+  const version = coverletters.length + 1;
+
   const resume = await transformPdfToText(curriculum.path);
 
-  const text = await openaiService(coverLertterWriting({
-    name: apply.name,
-    description: apply.description,
-    tags: apply.tags,
-    resume: resume,
-  }, isShort));
+  const text = await openaiService(
+    coverLertterWriting(
+      {
+        name: apply.name,
+        description: apply.description,
+        tags: apply.tags,
+        resume: resume,
+      },
+      isShort,
+    ),
+  );
 
   const { coverletter: textCoverletter } = parseToJson(text);
 
@@ -33,8 +48,24 @@ const createCoverletterService = async (applyId, curriculumId, isShort = false) 
     text: textCoverletter,
     apply: applyId,
     curriculum: curriculumId,
+    isShort,
+    version,
   });
 
+  return coverletter;
+};
+
+/**
+ * Get a coverletter version
+ * @param {string} applyId - The id of the apply
+ * @param {string} curriculumId - The id of the curriculum
+ * @returns {Promise<Coverletter[]>} The list of coverletters
+ */
+const getCoverLetterVersionService = async (applyId, curriculumId) => {
+  const coverletter = await Coverletter.find({
+    apply: applyId,
+    curriculum: curriculumId,
+  });
   return coverletter;
 };
 

@@ -2,6 +2,17 @@ import mongoose from 'mongoose';
 import Apply from './applies.js';
 import Curriculum from './curriculum.js';
 
+/**
+ * Coverletter Schema
+ * @typedef {Object} Coverletter
+ * @property {string} text - The text of the coverletter
+ * @property {Apply} apply - The apply object
+ * @property {Curriculum} curriculum - The curriculum object
+ * @property {boolean} isShort - Whether the coverletter is short
+ * @property {number} version - The version of the coverletter
+ * @property {Date} createdAt - The created at date of the coverletter
+ * @property {Date} updatedAt - The updated at date of the coverletter
+ */
 const coverletterSchema = new mongoose.Schema({
   text: {
     type: String,
@@ -17,15 +28,15 @@ const coverletterSchema = new mongoose.Schema({
     ref: Curriculum,
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  isShort: {
+    type: Boolean,
+    default: false,
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
+  version: {
+    type: Number,
+    default: 1,
   },
-});
+}, { timestamps: true });
 
 const Coverletter = mongoose.model('Coverletter', coverletterSchema);
 

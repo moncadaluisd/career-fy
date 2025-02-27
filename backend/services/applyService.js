@@ -7,10 +7,20 @@ import { scrappingService } from './scrappingService.js';
 
 /**
  * Create a new apply
+ * @param {Object} body - The body of the apply
+ * @returns {Promise<Apply>} The created apply
+ */
+const ApplyCreateService = async (body) => {
+  const apply = await Apply.create(body);
+  return apply;
+};
+
+/**
+ * Create a new apply by url
  * @param {string} url - The url of the job offer
  * @returns {Promise<Apply>} The created apply
  */
-const ApplyCreateService = async (url) => {
+const ApplyCreateByUrlService = async (url) => {
   const html = await scrappingService(url);
   const text = await openaiService(analyzingHtml(html));
   const json = parseToJson(text);
@@ -98,7 +108,7 @@ const updateApplyService = async (id, body) => {
 };
 
 export {
-  ApplyCreateService,
+  ApplyCreateByUrlService,
   getAllAppliesService,
   getApplyService,
   deleteApplyService,

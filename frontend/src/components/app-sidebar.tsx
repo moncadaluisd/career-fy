@@ -23,7 +23,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/",
       icon: SquareTerminal,
       isActive: true,
     },

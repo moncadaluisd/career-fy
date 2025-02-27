@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Building2, MoreHorizontal } from "lucide-react";
+import { Apply } from "@/interfaces/Apply";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,54 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTable } from "@/components/ui/data-table";
-// Application type definition
-type Application = {
-  id: string;
-  company: string;
-  position: string;
-  date: string;
-  status: "Applied" | "Interview" | "Rejected" | "Offer";
-  cv: string;
-};
+import { useQuery } from "@tanstack/react-query";
+import { getApplies } from "@/services/appliesService";
+import CircularLoader from "./circular-loading";
 
-// Sample data
-const applications: Application[] = [
-  {
-    id: "1",
-    company: "Acme Inc",
-    position: "Frontend Developer",
-    date: "2024-02-25",
-    status: "Applied",
-    cv: "Software Engineer CV",
-  },
-  {
-    id: "2",
-    company: "Globex Corp",
-    position: "Full Stack Engineer",
-    date: "2024-02-24",
-    status: "Interview",
-    cv: "Full Stack Developer CV",
-  },
-  {
-    id: "3",
-    company: "Hooli",
-    position: "Senior React Developer",
-    date: "2024-02-23",
-    status: "Rejected",
-    cv: "Tech Lead CV",
-  },
-  {
-    id: "4",
-    company: "Initech",
-    position: "Software Engineer",
-    date: "2024-02-22",
-    status: "Offer",
-    cv: "Software Engineer CV",
-  },
-  // Add more sample data here...
-];
-
-export const columns: ColumnDef<Application>[] = [
+export const columns: ColumnDef<Apply>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -103,7 +61,7 @@ export const columns: ColumnDef<Application>[] = [
     },
   },
   {
-    accessorKey: "position",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
@@ -117,7 +75,7 @@ export const columns: ColumnDef<Application>[] = [
     },
   },
   {
-    accessorKey: "date",
+    accessorKey: "createdAt",
     header: ({ column }) => {
       return (
         <Button
@@ -130,12 +88,8 @@ export const columns: ColumnDef<Application>[] = [
       );
     },
     cell: ({ row }) => {
-      return new Date(row.getValue("date")).toLocaleDateString();
+      return new Date(row.getValue("createdAt")).toLocaleDateString();
     },
-  },
-  {
-    accessorKey: "cv",
-    header: "CV Used",
   },
   {
     accessorKey: "status",
@@ -147,11 +101,11 @@ export const columns: ColumnDef<Application>[] = [
         <Badge
           variant={
             status === "Offer"
-              ? "success"
+              ? "default"
               : status === "Rejected"
               ? "destructive"
               : status === "Interview"
-              ? "warning"
+              ? "outline"
               : "secondary"
           }
         >
@@ -162,7 +116,7 @@ export const columns: ColumnDef<Application>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -187,6 +141,18 @@ export const columns: ColumnDef<Application>[] = [
 ];
 
 export function ApplicationsDataTable() {
-  return <DataTable columns={columns} data={applications} />;
+  const {
+    data: applies,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["applies"],
+    queryFn: getApplies,
+  });
+
+  if (isLoading) return <CircularLoader />;
+  if (isError) return <p>Error al cargar usuarios</p>;
+
+  return <DataTable columns={columns} data={applies as unknown as Apply[]} />;
 }
 
