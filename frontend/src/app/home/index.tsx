@@ -35,7 +35,7 @@ export default function Home() {
               />
 
               <FadeOut isVisible={isNewApply}>
-                <CreatingApply url={url} />
+                <CreatingApply url={url} isNew={true} />
               </FadeOut>
 
               <FadeOut isVisible={!isNewApply}>

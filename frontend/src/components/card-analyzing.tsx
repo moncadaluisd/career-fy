@@ -10,8 +10,8 @@ export function CardAnalyzing({
   isLoading: boolean;
 }) {
   return (
-    <Card className="bg-white/70 backdrop-blur-lg border border-slate-200/60 p-4 shadow-sm">
-      <CardContent className="py-2">
+    <Card className="bg-white/70 backdrop-blur-lg border border-slate-200/60 my-0 p-2 shadow-sm">
+      <CardContent className="py-1">
         <div
           className={`text-sm text-muted-foreground flex items-center gap-2 ${
             isLoading ? "animate-pulse" : ""

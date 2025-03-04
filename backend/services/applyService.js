@@ -22,7 +22,8 @@ const ApplyCreateService = async (body) => {
  */
 const ApplyCreateByUrlService = async (url) => {
   const html = await scrappingService(url);
-  const text = await openaiService(analyzingHtml(html));
+html
+  const text = await openaiService(analyzingHtml());
   const json = parseToJson(text);
 
   if (!json) {
@@ -56,7 +57,8 @@ const ApplyCreateByUrlService = async (url) => {
  * @returns {Promise<Apply[]>} The list of applies
  */
 const getAllAppliesService = async () => {
-  const applies = await Apply.find();
+  // sort by createdAt
+  const applies = await Apply.find().sort({ createdAt: -1 });
   return applies;
 };
 

@@ -5,8 +5,9 @@ import { CardAnalyzing } from "./card-analyzing";
 import { createApplyByUrl } from "@/services/appliesService";
 import { Apply } from "@/interfaces/Apply";
 import { CardApply } from "./card-applie";
+import { CardSelections } from "./card-selections";
 
-export function CreatingApply({ url }: { url: string }) {
+export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
   const [apply, setApply] = useState<Apply | null>(null);
   const requestMadeRef = useRef(false);
 
@@ -21,14 +22,14 @@ export function CreatingApply({ url }: { url: string }) {
   });
 
   useEffect(() => {
-    if (url && !requestMadeRef.current) {
+    if (url && !requestMadeRef.current && isNew) {
       requestMadeRef.current = true;
       mutation.mutate(url);
     }
-  }, [url, mutation]);
+  }, [url, mutation, isNew]);
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+    <div className="flex-1 space-y-3 p-4 md:p-8 pt-6">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -43,14 +44,28 @@ export function CreatingApply({ url }: { url: string }) {
       </motion.div>
 
       {apply && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.5 }}
-        >
-          <CardApply apply={apply} />
-        </motion.div>
+        <>
+          <div className="flex flex-col items-center">
+            {/* Upper line segment */}
+
+            <div className="w-0.5 h-6 bg-gray-200" />
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5 }}
+          >
+            <CardApply apply={apply} />
+          </motion.div>
+
+          <div className="flex flex-col items-center">
+            {/* Upper line segment */}
+            <div className="w-0.5 h-6 bg-gray-200" />
+          </div>
+
+          <CardSelections />
+        </>
       )}
     </div>
   );

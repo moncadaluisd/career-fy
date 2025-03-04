@@ -16,7 +16,8 @@ import {
 import { DataTable } from "@/components/ui/data-table";
 import { useQuery } from "@tanstack/react-query";
 import { getApplies } from "@/services/appliesService";
-import CircularLoader from "./circular-loading";
+import { LoaderContainer } from "./loader-container";
+import { Link } from "react-router";
 
 export const columns: ColumnDef<Apply>[] = [
   {
@@ -116,7 +117,7 @@ export const columns: ColumnDef<Apply>[] = [
   },
   {
     id: "actions",
-    cell: () => {
+    cell: ({ row}) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -128,8 +129,9 @@ export const columns: ColumnDef<Apply>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-            <DropdownMenuItem>Update Status</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to={`/apply/${row.original._id}`}>View Details</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-destructive">
               Delete
             </DropdownMenuItem>
@@ -150,7 +152,7 @@ export function ApplicationsDataTable() {
     queryFn: getApplies,
   });
 
-  if (isLoading) return <CircularLoader />;
+  if (isLoading) return <LoaderContainer />;
   if (isError) return <p>Error al cargar usuarios</p>;
 
   return <DataTable columns={columns} data={applies as unknown as Apply[]} />;

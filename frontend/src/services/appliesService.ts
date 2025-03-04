@@ -9,7 +9,7 @@ export const getApplies = async (): Promise<ResponseApi<Apply[]>> => {
 
 export const getApply = async (id: string): Promise<ResponseApi<Apply>> => {
   const response = await apiClient.get(`/applies/${id}`);
-  return response.data.data;
+  return response.data;
 };
 
 export const createApplyByUrl = async (
