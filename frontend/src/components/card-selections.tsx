@@ -5,10 +5,17 @@ import { getCurriculums } from "@/services/curriculumService";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
-export function CardSelections() {
+export function CardSelections({
+  onGenerateCoverLetter,
+  curriculumSelected = null,
+}: {
+  onGenerateCoverLetter: (curriculum: Curriculum) => void;
+  curriculumSelected: Curriculum | null;
+}) {
   const [selectedCurriculum, setSelectedCurriculum] =
-    useState<Curriculum | null>(null);
+    useState<Curriculum | null>(curriculumSelected);
 
   const { data: curriculums } = useQuery({
     queryKey: ["curriculums"],
@@ -17,6 +24,15 @@ export function CardSelections() {
 
   const handleSelectCurriculum = (curriculum: Curriculum) => {
     setSelectedCurriculum(curriculum);
+  };
+
+  const handleGenerateCoverLetter = () => {
+    if (!selectedCurriculum) {
+      toast.error("Please select a curriculum");
+      return;
+    }
+
+    onGenerateCoverLetter(selectedCurriculum);
   };
 
   return (
@@ -36,7 +52,13 @@ export function CardSelections() {
           ))}
         </div>
         <div className="w-full flex justify-end mt-4">
-          <Button> Generate a Cover Letter</Button>
+          <Button
+            onClick={handleGenerateCoverLetter}
+            disabled={!selectedCurriculum}
+          >
+            {" "}
+            Generate CoverLetter
+          </Button>
         </div>
       </CardContent>
     </Card>

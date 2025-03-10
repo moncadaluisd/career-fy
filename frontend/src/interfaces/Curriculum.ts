@@ -2,11 +2,14 @@
 export interface Curriculum {
     _id: string;
     name: string;
+    notes: string;
     path: string;
     status: string;
     fileIdAi: string;
+    data: string;
     createdAt: Date;
     updatedAt: Date;
+    usedIn?: number;
 }
 
 export interface CurriculumReview {

@@ -6,8 +6,14 @@ import { createApplyByUrl } from "@/services/appliesService";
 import { Apply } from "@/interfaces/Apply";
 import { CardApply } from "./card-applie";
 import { CardSelections } from "./card-selections";
+import { Curriculum } from "@/interfaces/Curriculum";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
+  const navigate = useNavigate();
+
+  const [error, setError] = useState<string | null>(null);
   const [apply, setApply] = useState<Apply | null>(null);
   const requestMadeRef = useRef(false);
 
@@ -18,6 +24,13 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
     },
     onSuccess: (data) => {
       setApply(data);
+
+      navigate(`/applies/${data._id}`);
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error("Error creating apply");
+      setError(error.message);
     },
   });
 
@@ -27,6 +40,10 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
       mutation.mutate(url);
     }
   }, [url, mutation, isNew]);
+
+  const handleGenerateCoverLetter = (curriculum: Curriculum) => {
+    console.log(curriculum);
+  };
 
   return (
     <div className="flex-1 space-y-3 p-4 md:p-8 pt-6">
@@ -38,7 +55,14 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
       >
         <CardAnalyzing
           isDot={true}
-          text={apply ? "Apply created" : "Getting information from the url..."}
+          isError={error !== null}
+          text={
+            apply
+              ? "Apply created"
+              : error
+              ? "Error creating apply - " + error
+              : "Getting information from the url..."
+          }
           isLoading={apply === null}
         />
       </motion.div>
@@ -64,7 +88,10 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
             <div className="w-0.5 h-6 bg-gray-200" />
           </div>
 
-          <CardSelections />
+          <CardSelections
+            onGenerateCoverLetter={handleGenerateCoverLetter}
+            curriculumSelected={apply?.coverLetters[0]?.curriculum || null}
+          />
         </>
       )}
     </div>

@@ -14,10 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTable } from "@/components/ui/data-table";
-import { useQuery } from "@tanstack/react-query";
-import { getApplies } from "@/services/appliesService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteApply, getApplies } from "@/services/appliesService";
 import { LoaderContainer } from "./loader-container";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 export const columns: ColumnDef<Apply>[] = [
   {
@@ -117,7 +118,24 @@ export const columns: ColumnDef<Apply>[] = [
   },
   {
     id: "actions",
-    cell: ({ row}) => {
+    cell: function ActionCell({ row }) {
+      const queryClient = useQueryClient();
+
+      const mutation = useMutation({
+        mutationFn: () => deleteApply(row.original._id),
+        onSuccess: () => {
+          toast.success("Apply deleted");
+          queryClient.invalidateQueries({ queryKey: ["applies"] });
+        },
+        onError: () => {
+          toast.error("Error deleting apply");
+        },
+      });
+
+      const handleDeleteApply = () => {
+        mutation.mutate();
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -132,7 +150,10 @@ export const columns: ColumnDef<Apply>[] = [
             <DropdownMenuItem>
               <Link to={`/apply/${row.original._id}`}>View Details</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={handleDeleteApply}
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -28,6 +28,17 @@ const curriculumReviewSchema = new mongoose.Schema({
   }
 }, { timestamps: true });  // Adds createdAt and updatedAt to each review
 
+
+
+/**
+ * Curriculum Schema
+ * @typedef {Object} Curriculum
+ * @property {string} name - The name of the curriculum
+ * @property {string} path - The path of the curriculum
+ * @property {string} status - The status of the curriculum
+ * @property {string} data - The information in text format of the curriculum
+ * @property {CurriculumReview[]} curriculumReview - The reviews of the curriculum
+ */
 const curriculumSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -40,6 +51,14 @@ const curriculumSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
+  },
+  notes: {
+    type: String,
+    required: false,
+  },
+  data: {
+    type: String,
+    required: false,
   },
   curriculumReview: [curriculumReviewSchema],  // Using the defined review schema
   fileIdAi: {

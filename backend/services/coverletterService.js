@@ -73,8 +73,21 @@ const getCoverLetterVersionService = async (applyId, curriculumId) => {
  * Get all coverletters
  * @returns {Promise<Coverletter[]>} The list of coverletters
  */
-const getAllCoverlettersService = async () => {
-  const coverletters = await Coverletter.find().populate('apply');
+const getAllCoverlettersService = async (
+  curriculumId = null,
+  applyId = null,
+) => {
+  const query = {};
+
+  if (curriculumId) {
+    query.curriculum = curriculumId;
+  }
+
+  if (applyId) {
+    query.apply = applyId;
+  }
+
+  const coverletters = await Coverletter.find(query).populate('apply', 'curriculum');
   return coverletters;
 };
 

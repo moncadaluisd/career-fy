@@ -40,7 +40,9 @@ const createCoverletter = async (req, res, next) => {
  */
 const getAllCoverletters = async (req, res, next) => {
   try {
-    const json = await getAllCoverlettersService();
+    const { curriculumId, applyId } = req.query;
+
+    const json = await getAllCoverlettersService(curriculumId, applyId);
     return handleApi(res, json, 200, 'Coverletters fetched successfully');
   } catch (error) {
     next(error);

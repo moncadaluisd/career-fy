@@ -1,13 +1,13 @@
-import { Apply } from "@/interfaces/Apply";
+import { Apply, ApplyWithCoverLetters } from "@/interfaces/Apply";
 import apiClient from "./apiClient";
 import { ResponseApi } from "@/interfaces/ResponseApi";
 
-export const getApplies = async (): Promise<ResponseApi<Apply[]>> => {
+export const getApplies = async (): Promise<ResponseApi<ApplyWithCoverLetters[]>> => {
   const response = await apiClient.get("/applies");
   return response.data.data;
 };
 
-export const getApply = async (id: string): Promise<ResponseApi<Apply>> => {
+export const getApply = async (id: string): Promise<ResponseApi<ApplyWithCoverLetters>> => {
   const response = await apiClient.get(`/applies/${id}`);
   return response.data;
 };

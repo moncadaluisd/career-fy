@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MoreHorizontal, Upload } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,8 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -27,19 +25,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useQuery } from "@tanstack/react-query";
-import { getCurriculums } from "@/services/curriculumService";
+
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { deleteCurriculum, getCurriculums } from "@/services/curriculumService";
 import { Curriculum } from "@/interfaces/Curriculum";
 import { ResponseApi } from "@/interfaces/ResponseApi";
+import FormCurriculum from "./forms/form-curriculum";
 
 // Define a type for the CV items that extends the Curriculum interface
 interface CVItem extends Curriculum {
   description?: string;
   file?: string;
-usedIn?: number;
+  usedIn?: number;
+  date?: Date;
 }
 
 const CurriculumManager = () => {
@@ -47,6 +45,8 @@ const CurriculumManager = () => {
     queryKey: ["curriculums"],
     queryFn: getCurriculums,
   });
+
+  const queryClient = useQueryClient();
 
   const curriculums = curriculumsResponse?.data ?? [];
 
@@ -64,51 +64,27 @@ const CurriculumManager = () => {
     cvs.length > 0 ? cvs[0] : null
   );
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [uploadOpen, setUploadOpen] = useState(false);
+
+  const mutation = useMutation({
+    mutationFn: (id: string) => deleteCurriculum(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["curriculums"] });
+    },
+  });
+
+  const handleDeleteCurriculum = (id: string) => {
+    mutation.mutate(id);
+  };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium">My Curriculums</h3>
-        <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Upload className="mr-2 h-4 w-4" />
-              Upload CV
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Upload New CV</DialogTitle>
-              <DialogDescription>
-                Upload a new CV and add relevant details.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="cv-name">CV Name</Label>
-                <Input id="cv-name" placeholder="e.g., Software Engineer CV" />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="cv-description">Description</Label>
-                <Textarea
-                  id="cv-description"
-                  placeholder="Add notes about this version..."
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="cv-file">File</Label>
-                <Input id="cv-file" type="file" accept=".pdf" />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setUploadOpen(false)}>
-                Cancel
-              </Button>
-              <Button type="submit">Upload</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <FormCurriculum
+          onUploadSuccess={() => {
+            queryClient.invalidateQueries({ queryKey: ["curriculums"] });
+          }}
+        />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -136,7 +112,10 @@ const CurriculumManager = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem>Download</DropdownMenuItem>
                   <DropdownMenuItem>Edit Details</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={() => handleDeleteCurriculum(cv._id)}
+                  >
                     Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>

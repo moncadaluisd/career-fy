@@ -22,7 +22,13 @@ const getAllCurriculumService = async () => {
  */
 const createCurriculumService = async ({ name, path }) => {
   const status = 'pending';
-  const curriculum = await Curriculum.create({ name, path, status });
+  const text = await transformPdfToText(path);
+  const curriculum = await Curriculum.create({
+    name,
+    path,
+    status,
+    data: text,
+  });
   return curriculum;
 };
 

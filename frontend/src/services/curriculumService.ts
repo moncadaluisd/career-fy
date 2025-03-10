@@ -20,12 +20,31 @@ export const getCurriculumById = async (
   return response.data;
 };
 
-export const createCurriculum = async (
-  curriculum: Curriculum
-): Promise<ResponseApi<Curriculum>> => {
+export const createCurriculum = async ({
+  name,
+  notes,
+  file,
+}: {
+  name: string;
+  notes?: string;
+  file: File;
+}): Promise<ResponseApi<Curriculum>> => {
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("notes", notes || "");
+  formData.append("file", file);
+
+  console.log(formData);
+  // is not sending as a form data
   const response = await apiClient.post<ResponseApi<Curriculum>>(
     "/curriculums",
-    curriculum
+    formData,
+    {
+      headers: {
+        "Accept": "multipart/form-data",
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
   return response.data;
 };

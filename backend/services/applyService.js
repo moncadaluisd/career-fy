@@ -22,8 +22,8 @@ const ApplyCreateService = async (body) => {
  */
 const ApplyCreateByUrlService = async (url) => {
   const html = await scrappingService(url);
-html
-  const text = await openaiService(analyzingHtml());
+
+  const text = await openaiService(analyzingHtml(html));
   const json = parseToJson(text);
 
   if (!json) {
