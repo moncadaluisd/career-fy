@@ -1,16 +1,16 @@
 // this is a card that shows the information of the apply
 
-import { Apply } from "@/interfaces/Apply";
+import { Apply } from "@/interfaces/Apply"
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Building2, Calendar, MapPin, Clock } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+} from "./ui/card"
+import { Badge } from "./ui/badge"
+import { Building2, Calendar, MapPin, Clock } from "lucide-react"
+import { formatDistanceToNow } from "date-fns"
 
 export function CardApply({ apply }: { apply: Apply }) {
   // Format the creation date to show as "X days/hours ago"
@@ -18,6 +18,7 @@ export function CardApply({ apply }: { apply: Apply }) {
   const timeAgo = apply?.createdAt ? formatDistanceToNow(new Date(apply?.createdAt), {
     addSuffix: true,
   }) : "No date"
+
 
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">

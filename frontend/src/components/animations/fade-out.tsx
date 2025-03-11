@@ -1,9 +1,9 @@
-import { AnimatePresence } from "motion/react";
-import * as motion from "motion/react-client";
+import { AnimatePresence } from "motion/react"
+import * as motion from "motion/react-client"
 
 interface FadeOutProps {
-  children: React.ReactNode;
-  isVisible: boolean;
+  children: React.ReactNode
+  isVisible: boolean
 }
 
 export const FadeOut: React.FC<FadeOutProps> = ({ children, isVisible }) => {
@@ -21,6 +21,6 @@ export const FadeOut: React.FC<FadeOutProps> = ({ children, isVisible }) => {
         </motion.div>
       ) : null}
     </AnimatePresence>
-  );
-};
+  )
+}
 

@@ -88,6 +88,7 @@ const CurriculumManager = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+
         {cvs.map((cv: CVItem) => (
           <Card key={cv._id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -136,6 +137,12 @@ const CurriculumManager = () => {
             </CardFooter>
           </Card>
         ))}
+
+        {curriculums.length === 0 && (
+          <div className="text-center text-muted-foreground col-span-full my-10">
+            No curriculums found
+          </div>
+        )}
       </div>
 
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>

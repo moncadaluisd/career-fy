@@ -6,13 +6,18 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { Trash } from "lucide-react";
 
 export function CardSelections({
   onGenerateCoverLetter,
   curriculumSelected = null,
+  onHandleCurriculumChange,
+  isLoading = false,
 }: {
   onGenerateCoverLetter: (curriculum: Curriculum) => void;
   curriculumSelected: Curriculum | null;
+  onHandleCurriculumChange: (curriculum: Curriculum | null) => void;
+  isLoading: boolean;
 }) {
   const [selectedCurriculum, setSelectedCurriculum] =
     useState<Curriculum | null>(curriculumSelected);
@@ -24,6 +29,7 @@ export function CardSelections({
 
   const handleSelectCurriculum = (curriculum: Curriculum) => {
     setSelectedCurriculum(curriculum);
+    onHandleCurriculumChange(curriculum);
   };
 
   const handleGenerateCoverLetter = () => {
@@ -38,7 +44,17 @@ export function CardSelections({
   return (
     <Card>
       <CardTitle className="text-lg font-bold px-6 pt-6">
-        Select Curriculums
+        Select Curriculums{" "}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => {
+            setSelectedCurriculum(null);
+            onHandleCurriculumChange(null);
+          }}
+        >
+          <Trash />
+        </Button>
       </CardTitle>
       <CardContent className="p-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 ">
@@ -54,7 +70,7 @@ export function CardSelections({
         <div className="w-full flex justify-end mt-4">
           <Button
             onClick={handleGenerateCoverLetter}
-            disabled={!selectedCurriculum}
+            disabled={!selectedCurriculum || isLoading}
           >
             {" "}
             Generate CoverLetter

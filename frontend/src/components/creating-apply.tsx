@@ -89,6 +89,8 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
           </div>
 
           <CardSelections
+            isLoading={mutation.isPending}
+            onHandleCurriculumChange={() => {}}
             onGenerateCoverLetter={handleGenerateCoverLetter}
             curriculumSelected={apply?.coverLetters[0]?.curriculum || null}
           />

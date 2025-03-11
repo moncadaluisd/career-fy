@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MoreHorizontal, FileText, Copy } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Coverletter } from "@/interfaces/Coverletter";
 import { toast } from "sonner";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   deleteCoverLetter,
   getConverLetters,
@@ -38,6 +38,12 @@ interface CoverLetterItem extends Coverletter {
   companyName?: string;
   position?: string;
 }
+/**
+ * This component is used to manage the cover letters of a curriculum
+ * @param curriculumId - The id of the curriculum
+ * @param applyId - The id of the apply
+ * @returns A component to manage the cover letters of a curriculum
+ */
 
 const CoverLetterManager = ({
   curriculumId,
@@ -46,11 +52,9 @@ const CoverLetterManager = ({
   curriculumId: string | null;
   applyId: string | null;
 }) => {
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
 
-  queryClient.invalidateQueries({ queryKey: ["coverletters"] });
-
-  const { data: coverlettersResponse } = useQuery({
+  const { data: coverlettersResponse, refetch } = useQuery({
     queryKey: ["coverletters"],
     queryFn: () => getConverLetters(curriculumId, applyId),
   });
@@ -77,6 +81,10 @@ const CoverLetterManager = ({
     mutation.mutate(coverId);
   };
 
+  useEffect(() => {
+    refetch();
+  }, [curriculumId]);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -88,6 +96,7 @@ const CoverLetterManager = ({
           <Card key={coverLetter._id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
+                {coverLetter.curriculum?.name} <br />
                 Version: {coverLetter.version}
               </CardTitle>
               <DropdownMenu>
@@ -136,7 +145,7 @@ const CoverLetterManager = ({
         ))}
 
         {coverletters.length === 0 && (
-          <div className="text-center text-muted-foreground">
+          <div className="text-center text-muted-foreground col-span-full my-10">
             No cover letters found
           </div>
         )}

@@ -34,7 +34,7 @@ export default function ApplyId() {
       curriculumId: string;
       applyId: string;
     }) => {
-      const data = await generateCoverLetter({ curriculumId, applyId });
+      const data = await generateCoverLetter({ curriculumId, applyId, isShort: true });
       return data.data;
     },
     onSuccess: (_data) => {
@@ -54,6 +54,10 @@ export default function ApplyId() {
       const applyId: string = apply.data._id;
       mutation.mutate({ curriculumId, applyId });
     }
+  };
+
+  const handleCurriculumCoverlettersChange = (curriculum: Curriculum | null) => {
+    setCurriculum(curriculum);
   };
 
   return (
@@ -80,16 +84,20 @@ export default function ApplyId() {
 
               <div className="p-4">
                 <CardSelections
+                  isLoading={mutation.isPending}
+                  onHandleCurriculumChange={handleCurriculumCoverlettersChange}
                   onGenerateCoverLetter={handleCurriculumChange}
                   curriculumSelected={curriculum}
                 />
               </div>
 
               <div className="p-4">
-                <CoverLetterManager
-                  curriculumId={curriculum?._id as string | null}
-                  applyId={apply?.data?._id as string | null}
-                />
+                {apply?.data._id && (
+                  <CoverLetterManager
+                    curriculumId={curriculum?._id as string | null}
+                    applyId={apply?.data?._id as string | null}
+                  />
+                )}
               </div>
             </div>
           </SidebarInset>

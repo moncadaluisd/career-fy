@@ -5,15 +5,18 @@ import { Coverletter } from "@/interfaces/Coverletter";
 export const generateCoverLetter = async ({
   curriculumId,
   applyId,
+  isShort = false,
 }: {
   curriculumId: string;
   applyId: string;
+  isShort?: boolean;
 }): Promise<ResponseApi<Curriculum>> => {
   const response = await apiClient.post<ResponseApi<Curriculum>>(
     "/coverletters",
     {
       curriculumId,
       applyId,
+      isShort,
     }
   );
   return response.data;
