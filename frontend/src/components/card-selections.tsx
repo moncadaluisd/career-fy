@@ -72,8 +72,7 @@ export function CardSelections({
             onClick={handleGenerateCoverLetter}
             disabled={!selectedCurriculum || isLoading}
           >
-            {" "}
-            Generate CoverLetter
+            {isLoading ? "Generating..." : "Generate CoverLetter"}
           </Button>
         </div>
       </CardContent>

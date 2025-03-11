@@ -87,8 +87,10 @@ const getAllCoverlettersService = async (
     query.apply = applyId;
   }
 
-  const coverletters = await Coverletter.find(query).populate('apply', 'curriculum');
-  return coverletters;
+
+  const coverletters = await Coverletter.find(query);
+  const coverlettersWithPopulated = await Coverletter.populate(coverletters, 'apply curriculum');
+  return coverlettersWithPopulated;
 };
 
 /**
