@@ -9,17 +9,30 @@ export const analyzingHtml = (html = '', model = 'gpt-4o-mini') => {
     messages: [
       {
         role: 'system',
-        content: `You are a expert in analyzing html, you will analyze the html
-        and extract the title, description and tags of the job offer`,
+        content: `You are an expert analyzing html code to get the information about that html code.
+
+                    You will be given a html code and you will need to extract the information about the html code. The information that you will receive
+                      is about job offers.
+
+                    Important:
+                    - Do not return the html code, only the information requested.
+                    - The description should be a string with the whole description of the job offer nicely formatted explain legibly and with all the details.
+
+                    You will need to extract the following information:
+                    - name - String
+                    - description - String
+                    - location - String | Optional
+                    - salary - String | Optional
+                    - type - Remote, Hybrid, Onsite | Optional
+                    - tags - String[] | Optional
+                    - company - String | Optional
+
+
+                    You will need to return the information in a json format.`,
       },
       {
         role: 'user',
         content: `Here is the html: ${html}`,
-      },
-      {
-        role: 'assistant',
-        content: `Your response should be a json, only return the json nothing else, with the following keys:
-        - name, description, tags String[], location, typework, salary, company, url`,
       },
     ],
   };

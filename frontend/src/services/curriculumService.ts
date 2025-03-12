@@ -34,7 +34,6 @@ export const createCurriculum = async ({
   formData.append("notes", notes || "");
   formData.append("file", file);
 
-  console.log(formData);
   // is not sending as a form data
   const response = await apiClient.post<ResponseApi<Curriculum>>(
     "/curriculums",

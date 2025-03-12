@@ -5,6 +5,7 @@ import {
   getAllCurriculum,
   getCurriculum,
   getReviewFromResume,
+  showCurriculumPdfFromPath,
 } from '../controllers/curriculumController.js';
 import { createCurriculumValidator } from '../middleware/validators/curriculumValidator.js';
 import { uploadPdf } from '../middleware/handleMulter.js';
@@ -22,5 +23,5 @@ curriculumRouter.post(
 curriculumRouter.get('/:id', getCurriculum);
 curriculumRouter.delete('/:id', deleteCurriculum);
 curriculumRouter.get('/:id/review', getReviewFromResume);
-
+curriculumRouter.get('/:id/pdf', showCurriculumPdfFromPath);
 export default curriculumRouter;

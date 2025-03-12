@@ -1,12 +1,13 @@
 
 export interface Curriculum {
-    _id: string;
+    _id?: string;
     name: string;
     notes: string;
     path: string;
     status: string;
     fileIdAi: string;
     data: string;
+    description: string;
     createdAt: Date;
     updatedAt: Date;
     usedIn?: number;

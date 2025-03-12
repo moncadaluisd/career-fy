@@ -21,6 +21,13 @@ export const createApplyByUrl = async (
   return response.data;
 };
 
+export const createApply = async (
+  apply: Apply
+): Promise<ResponseApi<Apply>> => {
+  const response = await apiClient.post("/applies/manual", apply);
+  return response.data;
+};
+
 export const updateApply = async (
   id: string,
   apply: Apply

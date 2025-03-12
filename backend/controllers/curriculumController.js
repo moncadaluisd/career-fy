@@ -7,6 +7,7 @@ import {
   getAllCurriculumService,
   getCurriculumService,
   getReviewFromResumeService,
+  showCurriculumPdfFromPathService,
 } from '../services/curriculumService.js';
 import path from 'path';
 
@@ -109,10 +110,30 @@ const getReviewFromResume = async (req, res, next) => {
     handleApiError(res, error.stack, 500, error.message);
   }
 };
+
+/**
+ * Show a curriculum pdf from path
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ */
+const showCurriculumPdfFromPath = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const curriculum = await getCurriculumService(id);
+    const pdf = await showCurriculumPdfFromPathService(curriculum.path);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="curriculum.pdf"');
+    res.send(pdf);
+  } catch (error) {
+    handleApiError(res, error.stack, 500, error.message);
+  }
+};
 export {
   createCurriculum,
   getAllCurriculum,
   deleteCurriculum,
   getCurriculum,
   getReviewFromResume,
+  showCurriculumPdfFromPath
 };

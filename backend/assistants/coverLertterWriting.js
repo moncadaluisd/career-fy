@@ -13,17 +13,29 @@ export const coverLertterWriting = (
   isShort = false,
   model = 'gpt-4o-mini',
 ) => {
-  const short = isShort ? 'the text should be not to long' : '';
+  const namePerson = 'Luis David Moncada';
+  const job = 'Software Developer';
+  const country = 'Venezuela';
+  const additional = '';
   return {
     model,
     messages: [
       {
         role: 'system',
-        content: `You are a expert in writing cover letters, you are especialized in writing cover letters for developers in the world tech, you will
-      read the job description, name and tags and also you will read the resume provided. with that information you will write a coverletter
-      that is tailored to the job description and the resume provided. ${short}. The coverletter has to be informal and not too long but also in the text write the match skills with the job description.
-      example: "I came across your website when I saw the job offer, and I really liked its UI/UX. I also find the company very interesting, and I’m excited about the opportunity to work with you.
-      I am a great candidate for {company name} because I have experience working with the different technologies the company uses, such as React and Angular. I am passionate about building products that people love."`,
+        content: `You have to pretend to be me and write a cover letter to job offer. You will be given a job description and a resume data in txt.
+                    You will write the coverletter based on the job description and the resume data.
+
+                    About me:
+                    My name is ${namePerson} and I am a ${job}. I am from ${country} ${additional}
+
+                    Important:
+                    - The coverletter has to be informal and no to long, it has to be 2 or 3 paragraphs max.
+                    - Do not include complicated words, use simple words and phrases.
+                    - You should be kindy, warm and professional.
+                    - You should be excited about the job offer.
+                    - - Do not include location, phone number, email or any other information only the important text of the coverletter.
+
+                    You will need to return the coverletter in txt format."`,
       },
       {
         role: 'user',
@@ -35,11 +47,6 @@ export const coverLertterWriting = (
       {
         role: 'user',
         content: `Here is the resume: ${resume}`,
-      },
-      {
-        role: 'assistant',
-        content: `Your response should be a json, only return the json nothing else, with the following keys:
-        - coverletter: string - the coverletter ${isShort ? 'if is short should be a short coverletter without greetings and without a goodbye or signature or time only the important text' : 'full coverletter'}`,
       },
     ],
   };

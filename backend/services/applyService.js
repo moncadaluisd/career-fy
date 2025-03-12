@@ -26,15 +26,16 @@ const ApplyCreateByUrlService = async (url) => {
   const text = await openaiService(analyzingHtml(html));
   const json = parseToJson(text);
 
+
   if (!json) {
-    throw new Error('Error parsing to json');
+    throw new Error('Error parsing to json the html');
   }
 
   if (
     !json.name ||
     !json.description
   ) {
-    throw new Error('Error parsing to json');
+    throw new Error('Error parsing to json with name or description');
   }
 
   const apply = await Apply.create({
@@ -115,4 +116,5 @@ export {
   getApplyService,
   deleteApplyService,
   updateApplyService,
+  ApplyCreateService
 };

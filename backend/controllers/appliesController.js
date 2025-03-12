@@ -2,6 +2,7 @@ import { validationResult } from 'express-validator';
 import { handleApi, handleApiError } from '../middleware/handleApi.js';
 import {
   ApplyCreateByUrlService,
+  ApplyCreateService,
   deleteApplyService,
   getAllAppliesService,
   getApplyService,
@@ -25,6 +26,28 @@ const createApply = async (req, res, next) => {
     const { url } = req.body;
 
     const json = await ApplyCreateByUrlService(url);
+
+    return handleApi(res, json, 200, 'Apply created successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Create a new apply manually
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next function
+ */
+const createApplyManual = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = errors.array();
+      return handleApiError(res, error, 422, 'Validation error');
+    }
+
+    const json = await ApplyCreateService(req.body);
 
     return handleApi(res, json, 200, 'Apply created successfully');
   } catch (error) {
@@ -92,4 +115,4 @@ const updateApply = async (req, res, next) => {
   }
 };
 
-export { createApply, getAllApplies, getApply, deleteApply, updateApply };
+export { createApply, getAllApplies, getApply, deleteApply, updateApply, createApplyManual };

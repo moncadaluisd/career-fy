@@ -71,6 +71,7 @@ const CoverLetterManager = ({
     mutationFn: (coverId: string) => deleteCoverLetter(coverId),
     onSuccess: () => {
       toast.success("Cover letter deleted");
+      refetch();
     },
     onError: () => {
       toast.error("Error deleting cover letter");

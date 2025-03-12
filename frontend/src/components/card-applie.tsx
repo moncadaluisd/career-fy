@@ -68,8 +68,9 @@ export function CardApply({ apply }: { apply: Apply }) {
         )}
 
         {apply?.description && (
-          <p className="text-sm">{apply?.description}</p>
+          <p className="text-sm whitespace-pre-wrap">{apply?.description}</p>
         )}
+
       </CardContent>
 
       <CardFooter className="pt-2 border-t text-xs text-muted-foreground">

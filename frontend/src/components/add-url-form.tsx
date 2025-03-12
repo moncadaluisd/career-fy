@@ -16,7 +16,6 @@ export function UrlInput({
   const handleSave = () => {
     // Handle saving the URL
 
-    console.log("Saving URL:", urlInput);
     handleNewApply(true, urlInput);
   };
 

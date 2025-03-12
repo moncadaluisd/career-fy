@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import Home from "./app/home";
 import ApplyId from "./app/AppliesId";
 import NotFound from "./app/NotFound";
+import CurriculumId from "./app/CurriculumId";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/apply/:id" element={<ApplyId />} />
+          <Route path="/curriculum/:id" element={<CurriculumId />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

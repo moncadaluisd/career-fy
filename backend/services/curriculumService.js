@@ -1,8 +1,17 @@
+import path from 'path';
+import { promises as fsPromises } from 'fs';
+import { fileURLToPath } from 'url';
+
+// Create equivalents for __dirname and __filename in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 import Curriculum from '../models/curriculum.js';
 import { careerCoach } from '../assistants/careerCoach.js';
 import { openaiService } from './openaiService.js';
 import transformPdfToText from '../utils/transformPdfToText.js';
 import { parseToJson } from '../utils/parseToJson.js';
+
 
 /**
  * Get all curriculum
@@ -73,10 +82,23 @@ const getReviewFromResumeService = async (id) => {
   return parsedJson;
 };
 
+/**
+ * Show a curriculum pdf from path
+ * @param {string} filePath
+ * @returns {Promise<Buffer>} The pdf
+ */
+const showCurriculumPdfFromPathService = async (filePath) => {
+  // Build the full path to the file
+  const fullPath = path.join(__dirname, '..', '', filePath);
+  const pdf = await fsPromises.readFile(fullPath);
+  return pdf;
+};
+
 export {
   createCurriculumService,
   getAllCurriculumService,
   getCurriculumService,
   deleteCurriculumService,
   getReviewFromResumeService,
+  showCurriculumPdfFromPathService,
 };

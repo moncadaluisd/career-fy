@@ -19,6 +19,8 @@ import { deleteApply, getApplies } from "@/services/appliesService";
 import { LoaderContainer } from "./loader-container";
 import { Link } from "react-router";
 import { toast } from "sonner";
+import React from "react";
+import ModalManualJobOffer from "./manual-job-offer";
 
 export const columns: ColumnDef<Apply>[] = [
   {
@@ -122,7 +124,7 @@ export const columns: ColumnDef<Apply>[] = [
       const queryClient = useQueryClient();
 
       const mutation = useMutation({
-        mutationFn: () => deleteApply(row.original._id),
+        mutationFn: () => deleteApply(row.original._id as string),
         onSuccess: () => {
           toast.success("Apply deleted");
           queryClient.invalidateQueries({ queryKey: ["applies"] });
@@ -168,6 +170,7 @@ export function ApplicationsDataTable() {
     data: applies,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["applies"],
     queryFn: getApplies,
@@ -176,6 +179,13 @@ export function ApplicationsDataTable() {
   if (isLoading) return <LoaderContainer />;
   if (isError) return <p>Error al cargar usuarios</p>;
 
-  return <DataTable columns={columns} data={applies as unknown as Apply[]} />;
+  return (
+    <React.Fragment>
+      <ModalManualJobOffer onUploadSuccess={() => {
+        refetch();
+      }} />
+      <DataTable columns={columns} data={applies as unknown as Apply[]} />
+    </React.Fragment>
+  )
 }
 

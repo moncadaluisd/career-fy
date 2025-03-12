@@ -16,8 +16,10 @@ import CoverLetterManager from "@/components/coverltetter-applied";
 import { Curriculum } from "@/interfaces/Curriculum";
 import { generateCoverLetter } from "@/services/coverLetterService";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 export default function ApplyId() {
   const { id } = useParams();
+  const queryClient = useQueryClient();
 
   const [curriculum, setCurriculum] = useState<Curriculum | null>(null);
 
@@ -40,6 +42,7 @@ export default function ApplyId() {
     onSuccess: (_data) => {
       console.log(_data);
       toast.success("Cover letter generated");
+      queryClient.invalidateQueries({ queryKey: ["coverletters"] });
     },
     onError: (error) => {
       console.log(error);
@@ -50,8 +53,8 @@ export default function ApplyId() {
   const handleCurriculumChange = (curriculum: Curriculum) => {
     setCurriculum(curriculum);
     if (curriculum && apply?.data?._id) {
-      const curriculumId: string = curriculum._id;
-      const applyId: string = apply.data._id;
+      const curriculumId: string = curriculum._id as string;
+      const applyId: string = apply.data._id as string;
       mutation.mutate({ curriculumId, applyId });
     }
   };

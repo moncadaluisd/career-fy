@@ -13,7 +13,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -31,6 +30,8 @@ import { deleteCurriculum, getCurriculums } from "@/services/curriculumService";
 import { Curriculum } from "@/interfaces/Curriculum";
 import { ResponseApi } from "@/interfaces/ResponseApi";
 import FormCurriculum from "./forms/form-curriculum";
+import { ShowIframePdf } from "./show-iframe-pdf";
+import { Link } from "react-router";
 
 // Define a type for the CV items that extends the Curriculum interface
 interface CVItem extends Curriculum {
@@ -88,7 +89,6 @@ const CurriculumManager = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-
         {cvs.map((cv: CVItem) => (
           <Card key={cv._id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -112,7 +112,9 @@ const CurriculumManager = () => {
                     Preview
                   </DropdownMenuItem>
                   <DropdownMenuItem>Download</DropdownMenuItem>
-                  <DropdownMenuItem>Edit Details</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to={`/curriculum/${cv._id}`}>View</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     className="text-destructive"
                     onClick={() => handleDeleteCurriculum(cv._id)}
@@ -146,19 +148,12 @@ const CurriculumManager = () => {
       </div>
 
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-3xl h-[800px]">
+        <DialogContent className="max-w-3xl h-[90vh]">
           <DialogHeader>
             <DialogTitle>{selectedCV?.name}</DialogTitle>
-            <DialogDescription>
-              {selectedCV?.description || "No description available"}
-            </DialogDescription>
           </DialogHeader>
           <div className="flex-1 w-full h-full min-h-[600px] rounded-md border">
-            <iframe
-              src={selectedCV?.path}
-              className="w-full h-full rounded-md"
-              title="CV Preview"
-            />
+            <ShowIframePdf id={selectedCV?._id || ""} />
           </div>
         </DialogContent>
       </Dialog>

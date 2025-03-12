@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@radix-ui/react-select": "^2.1.6"
+  }
+}

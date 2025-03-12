@@ -42,10 +42,9 @@ const createCoverletterService = async (
     ),
   );
 
-  const { coverletter: textCoverletter } = parseToJson(text);
 
   const coverletter = await Coverletter.create({
-    text: textCoverletter,
+    text: text,
     apply: applyId,
     curriculum: curriculumId,
     isShort,

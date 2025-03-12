@@ -5,8 +5,13 @@ import {
   getApply,
   deleteApply,
   updateApply,
+  createApplyManual,
 } from '../controllers/appliesController.js';
-import { createApplyValidator, updateApplyValidator } from '../middleware/validators/appliesValidator.js';
+import {
+  createApplyManualValidator,
+  createApplyValidator,
+  updateApplyValidator,
+} from '../middleware/validators/appliesValidator.js';
 
 const applyRouter = Router();
 
@@ -14,6 +19,7 @@ applyRouter.get('/', getAllApplies);
 
 applyRouter.post('/', createApplyValidator, createApply);
 
+applyRouter.post('/manual', createApplyManualValidator, createApplyManual);
 applyRouter.get('/:id', getApply);
 
 applyRouter.put('/:id', updateApplyValidator, updateApply);
