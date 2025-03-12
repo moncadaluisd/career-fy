@@ -92,7 +92,7 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
             isLoading={mutation.isPending}
             onHandleCurriculumChange={() => {}}
             onGenerateCoverLetter={handleGenerateCoverLetter}
-            curriculumSelected={apply?.coverLetters[0]?.curriculum || null}
+            curriculumSelected={apply?.coverLetters?.[0]?.curriculum as Curriculum | null}
           />
         </>
       )}

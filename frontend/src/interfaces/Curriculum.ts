@@ -7,7 +7,7 @@ export interface Curriculum {
     status: string;
     fileIdAi: string;
     data: string;
-    description: string;
+    description?: string;
     createdAt: Date;
     updatedAt: Date;
     usedIn?: number;

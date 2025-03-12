@@ -1,4 +1,4 @@
-#Career-Fy
+# Career-Fy
 
 ## Open-source platform to help you find a job
 
@@ -34,9 +34,20 @@ I developed this as a side project to help me find a job and also to learn how t
 
 2. Run `./install.sh` to install the dependencies
 
-3. Run `./dev.sh` to start the development servers
+3. Go to the backend folder and clone the .env.example file to .env and set the environment variables
+
+4. Go to the frontend folder and clone the .env.example file to .env and set the environment variables
+
+5. Run `./dev.sh` to start the development servers
 
 
+## Screenshots
+
+![Dashboard](./assets/dashboard.png)
+
+![Job](./assets/job.png)
+
+![Preview Resume](./assets/preview-resume.png)
 
 
 

@@ -35,7 +35,7 @@ import { Link } from "react-router";
 
 // Define a type for the CV items that extends the Curriculum interface
 interface CVItem extends Curriculum {
-  description?: string;
+  description?: string | undefined;
   file?: string;
   usedIn?: number;
   date?: Date;
@@ -117,7 +117,7 @@ const CurriculumManager = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="text-destructive"
-                    onClick={() => handleDeleteCurriculum(cv._id)}
+                    onClick={() => handleDeleteCurriculum(cv._id || "")}
                   >
                     Delete
                   </DropdownMenuItem>
@@ -131,7 +131,6 @@ const CurriculumManager = () => {
             </CardContent>
             <CardFooter className="flex justify-between">
               <div className="text-sm text-muted-foreground">
-                Used in {cv.usedIn || 0} applications
               </div>
               <Badge variant="secondary">
                 {new Date(cv.createdAt).toLocaleDateString()}
