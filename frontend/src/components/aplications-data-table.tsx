@@ -20,7 +20,7 @@ import { LoaderContainer } from "./loader-container";
 import { Link } from "react-router";
 import { toast } from "sonner";
 import React from "react";
-import ModalManualJobOffer from "./manual-job-offer";
+import ModalManualJobOffer from "./modal-manual-job-offer";
 
 export const columns: ColumnDef<Apply>[] = [
   {

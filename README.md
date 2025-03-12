@@ -10,12 +10,12 @@ I developed this as a side project to help me find a job and also to learn how t
 - [X] Get description of a job by url
 - [X] Upload multiple resumes
 - [X] Create Cover Letter based on a resume and a job description
-- [ ] Get
+- [X] Create a job offer manual
 - [ ] Create a job alert
 - [ ] Recomendations of jobs based on your curriculum
 - [ ] Chat with a AI to help you find a job
 - [ ] Get notified for new jobs based on your job alert
-- []  Suggestions to improve your resume
+- [ ]  Suggestions to improve your resume
 
 ## Tech Stack
 
@@ -27,4 +27,18 @@ I developed this as a side project to help me find a job and also to learn how t
 - [X] MongoDB
 - [X] OpenAI
 - [ ] Docker
+
+## How to run
+
+1. Clone the repository
+
+2. Run `./install.sh` to install the dependencies
+
+3. Run `./dev.sh` to start the development servers
+
+
+
+
+
+
 
