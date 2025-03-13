@@ -5,6 +5,16 @@ set -e
 
 echo "Starting development servers..."
 
+## addthe docker up when the person the parameter --docker
+if [ "$1" == "--docker" ]; then
+    echo "Starting docker..."
+    docker-compose up -d
+
+    # wait for the mongodb to be ready
+    echo "Waiting for mongodb to be ready..."
+    sleep 10
+fi
+
 # Start the backend server in the background
 echo "Starting backend server..."
 cd backend

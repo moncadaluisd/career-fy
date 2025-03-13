@@ -1,7 +1,5 @@
 import { coverLertterWriting } from '../assistants/coverLertterWriting.js';
 import Coverletter from '../models/coverletters.js';
-import { parseToJson } from '../utils/parseToJson.js';
-import transformPdfToText from '../utils/transformPdfToText.js';
 import { getApplyService } from './applyService.js';
 import { getCurriculumService } from './curriculumService.js';
 import { openaiService } from './openaiService.js';
@@ -12,11 +10,7 @@ import { openaiService } from './openaiService.js';
  * @param {string} applyId - The id of the apply
  * @returns {Promise<Coverletter>} The created coverletter
  */
-const createCoverletterService = async (
-  applyId,
-  curriculumId,
-  isShort = false,
-) => {
+const createCoverletterService = async (applyId, curriculumId) => {
   const apply = await getApplyService(applyId);
 
   const curriculum = await getCurriculumService(curriculumId);
@@ -28,7 +22,47 @@ const createCoverletterService = async (
 
   const version = coverletters.length + 1;
 
-  const resume = await transformPdfToText(curriculum.path);
+  const resume = curriculum.data;
+
+  const text = await openaiService(
+    coverLertterWriting({
+      name: apply.name,
+      description: apply.description,
+      tags: apply.tags,
+      resume: resume,
+    }),
+  );
+
+  const coverletter = await Coverletter.create({
+    text: text,
+    apply: applyId,
+    curriculum: curriculumId,
+    isShort: false,
+    version,
+  });
+
+  return coverletter;
+};
+
+const regenerateCoverLetterService = async (coverletterId, message) => {
+  const coverletter = await Coverletter.findById(coverletterId);
+  if (!coverletter) {
+    throw new Error('Coverletter not found');
+  }
+
+  const apply = await getApplyService(coverletter.apply);
+
+  const curriculum = await getCurriculumService(coverletter.curriculum);
+
+  const resume = curriculum.data;
+
+  const messageData = `
+   This is the  old coverletter:
+  ${coverletter.text}
+
+  This is the message:
+  ${message}
+  `;
 
   const text = await openaiService(
     coverLertterWriting(
@@ -38,18 +72,16 @@ const createCoverletterService = async (
         tags: apply.tags,
         resume: resume,
       },
-      isShort,
+      messageData,
+      'gpt-4o-mini',
     ),
   );
 
-
-  const coverletter = await Coverletter.create({
+  coverletter.message.push({
+    message: message,
     text: text,
-    apply: applyId,
-    curriculum: curriculumId,
-    isShort,
-    version,
   });
+  await coverletter.save();
 
   return coverletter;
 };
@@ -86,9 +118,16 @@ const getAllCoverlettersService = async (
     query.apply = applyId;
   }
 
-
   const coverletters = await Coverletter.find(query);
-  const coverlettersWithPopulated = await Coverletter.populate(coverletters, 'apply curriculum');
+  const coverlettersWithPopulated = await Coverletter.populate(
+    coverletters,
+    'apply curriculum',
+  );
+  // order messages from the most recent to the oldest
+  coverlettersWithPopulated.sort((a, b) => {
+    return b.message.length - a.message.length;
+  });
+
   return coverlettersWithPopulated;
 };
 
@@ -144,4 +183,5 @@ export {
   getCoverletterService,
   deleteCoverletterService,
   updateCoverletterService,
+  regenerateCoverLetterService,
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MoreHorizontal, FileText, Copy } from "lucide-react";
+import { MoreHorizontal, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,14 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +25,7 @@ import {
   deleteCoverLetter,
   getConverLetters,
 } from "@/services/coverLetterService";
+import { DialogCoverletter } from "./modals/dialog-coverletter";
 
 // Define a type for the cover letter items that extends the Coverletter interface
 interface CoverLetterItem extends Coverletter {
@@ -118,8 +112,6 @@ const CoverLetterManager = ({
                   >
                     Preview
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Download</DropdownMenuItem>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => handleDeleteCoverLetter(coverLetter._id)}
                     className="text-destructive"
@@ -152,39 +144,12 @@ const CoverLetterManager = ({
         )}
       </div>
 
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Software Engineer - Google</DialogTitle>
-            <DialogDescription>
-              Version {selectedCoverLetter?.version} • Created on{" "}
-            </DialogDescription>
-          </DialogHeader>
-          {/** add button to copy the text small and in the right top of the cover letter*/}
-
-          <div className="mt-0 p-4 rounded-md border bg-muted/50 max-h-[500px] overflow-y-auto relative">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                navigator.clipboard.writeText(selectedCoverLetter?.text || "");
-                toast.success("Copied to clipboard");
-              }}
-              className="absolute top-0 right-0"
-              size="icon"
-            >
-              <Copy className="h-2 w-2" />
-            </Button>
-            {/** show the \n in the text not using <br /> beacuse is not working */}
-            <p className="whitespace-pre-wrap">{selectedCoverLetter?.text}</p>
-          </div>
-          <DialogFooter className="mt-4">
-            <Button variant="outline" onClick={() => setPreviewOpen(false)}>
-              Close
-            </Button>
-            <Button>Download</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DialogCoverletter
+        previewOpen={previewOpen}
+        setPreviewOpen={setPreviewOpen}
+        selectedCoverLetter={selectedCoverLetter as Coverletter}
+        setSelectedCoverLetter={setSelectedCoverLetter}
+      />
     </div>
   );
 };

@@ -22,6 +22,14 @@ export const generateCoverLetter = async ({
   return response.data;
 };
 
+export const regenerateCoverLetter = async (
+  coverletterId: string,
+  message: string
+): Promise<ResponseApi<Coverletter>> => {
+  const response = await apiClient.post<ResponseApi<Coverletter>>(`/coverletters/${coverletterId}/message`, { message });
+  return response.data;
+};
+
 export const getConverLetters = async (
   curriculumId: string | null,
   applyId: string | null

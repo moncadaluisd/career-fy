@@ -5,6 +5,7 @@ import {
   deleteCoverletterService,
   getAllCoverlettersService,
   getCoverletterService,
+  regenerateCoverLetterService,
   updateCoverletterService,
 } from '../services/coverletterService.js';
 
@@ -27,6 +28,29 @@ const createCoverletter = async (req, res, next) => {
     const json = await createCoverletterService(applyId, curriculumId, isShort);
 
     return handleApi(res, json, 201, 'Coverletter created successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Create a new coverletter message
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next function
+ */
+const createCoverletterMessage = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = errors.array();
+      return handleApiError(res, error, 422, 'Validation error');
+    }
+
+    const { message } = req.body;
+    const coverletterId = req.params.id;
+    const json = await regenerateCoverLetterService(coverletterId, message);
+    return handleApi(res, json, 201, 'Coverletter message created successfully');
   } catch (error) {
     next(error);
   }
@@ -101,4 +125,5 @@ export {
   getCoverletter,
   deleteCoverletter,
   updateCoverletter,
+  createCoverletterMessage
 };
