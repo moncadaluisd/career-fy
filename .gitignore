@@ -223,3 +223,6 @@ $RECYCLE.BIN/
 
 # Uploads directory
 uploads/
+
+
+mongodb_data/

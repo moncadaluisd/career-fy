@@ -10,14 +10,15 @@
  */
 export const coverLertterWriting = (
   { name, description, tags, resume },
-  isShort = false,
+  isMessage = null,
   model = 'gpt-4o-mini',
 ) => {
-  const namePerson = 'Luis David Moncada';
-  const job = 'Software Developer';
-  const country = 'Venezuela';
-  const additional = '';
-  return {
+  const namePerson = process.env.NAME || '';
+  const job = process.env.JOB || '';
+  const country = process.env.COUNTRY || '';
+  const additional = process.env.ADDITIONAL || '';
+
+  const prompt = {
     model,
     messages: [
       {
@@ -47,7 +48,16 @@ export const coverLertterWriting = (
       {
         role: 'user',
         content: `Here is the resume: ${resume}`,
-      },
+      }
     ],
   };
+
+  if (isMessage) {
+    prompt.messages.push({
+      role: 'user',
+      content: isMessage,
+    });
+  }
+
+  return prompt;
 };

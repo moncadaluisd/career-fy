@@ -48,6 +48,7 @@ export function CardSelections({
         <Button
           variant="outline"
           size="icon"
+          className="ml-2"
           onClick={() => {
             setSelectedCurriculum(null);
             onHandleCurriculumChange(null);

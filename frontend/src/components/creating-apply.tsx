@@ -25,7 +25,12 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
     onSuccess: (data) => {
       setApply(data);
 
-      navigate(`/applies/${data._id}`);
+      // add time then naveigate to the url 
+
+
+      setTimeout(() => {
+        navigate(`/applies/${data._id}`);
+      }, 1000);
     },
     onError: (error) => {
       console.log(error);
