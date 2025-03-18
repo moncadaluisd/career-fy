@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Command, LifeBuoy, Send, SquareTerminal } from "lucide-react";
+import {  Command, SquareTerminal } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -27,18 +27,36 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
     },
+    // {
+    //   title: "Curriculum",
+    //   url: "/curriculum",
+    //   icon: BookOpen,
+    //   isActive: true,
+    // },
+    // {
+    //   title: "Aplications",
+    //   url: "/applications",
+    //   icon: File,
+    //   isActive: true,
+    // },
+    // {
+    //   title: "Resources",
+    //   url: "/resources",
+    //   icon: Box,
+    //   isActive: true,
+    // },
   ],
   navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
+    // {
+    //   title: "Support",
+    //   url: "#",
+    //   icon: LifeBuoy,
+    // },
+    // {
+    //   title: "Feedback",
+    //   url: "#",
+    //   icon: Send,
+    // },
   ],
   projects: [
     // {

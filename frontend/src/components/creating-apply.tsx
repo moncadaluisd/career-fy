@@ -29,7 +29,7 @@ export function CreatingApply({ url, isNew }: { url: string; isNew: boolean }) {
 
 
       setTimeout(() => {
-        navigate(`/applies/${data._id}`);
+        navigate(`/apply/${data._id}`);
       }, 1000);
     },
     onError: (error) => {
