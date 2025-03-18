@@ -26,7 +26,7 @@ I developed this as a side project to help me find a job and also to learn how t
 - [X] Express
 - [X] MongoDB
 - [X] OpenAI
-- [ ] Docker
+- [X] Docker
 
 ## How to run
 
@@ -40,6 +40,8 @@ I developed this as a side project to help me find a job and also to learn how t
 
 5. Run `./dev.sh` to start the development servers
 
+6. Optionally, run `./dev.sh --docker` to start the development servers in docker
+
 
 ## Screenshots
 
@@ -48,6 +50,8 @@ I developed this as a side project to help me find a job and also to learn how t
 ![Job](./assets/job.png)
 
 ![Preview Resume](./assets/preview-resume.png)
+
+![Cover Letter](./assets/coverletter.png)
 
 
 
