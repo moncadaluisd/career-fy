@@ -4,6 +4,7 @@ import { handleApi, handleApiError } from '../middleware/handleApi.js';
 import {
   createCurriculumService,
   deleteCurriculumService,
+  generateCurriculumReviewService,
   getAllCurriculumService,
   getCurriculumService,
   getReviewFromResumeService,
@@ -16,6 +17,7 @@ import path from 'path';
  * @param {Object} req - The request object
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
+ * @author: @moncadaluisd
  */
 const createCurriculum = async (req, res, next) => {
   try {
@@ -51,6 +53,7 @@ const createCurriculum = async (req, res, next) => {
  * @param {Object} req - The request object
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
+ * @author: @moncadaluisd
  */
 const getAllCurriculum = async (req, res, next) => {
   try {
@@ -66,6 +69,7 @@ const getAllCurriculum = async (req, res, next) => {
  * @param {Object} req - The request object
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
+ * @author: @moncadaluisd
  */
 const getCurriculum = async (req, res, next) => {
   try {
@@ -82,6 +86,7 @@ const getCurriculum = async (req, res, next) => {
  * @param {Object} req - The request object
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
+ * @author: @moncadaluisd
  */
 const deleteCurriculum = async (req, res, next) => {
   try {
@@ -100,6 +105,7 @@ const deleteCurriculum = async (req, res, next) => {
  * @param {Object} req - The request object
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
+ * @author: @moncadaluisd
  */
 const getReviewFromResume = async (req, res, next) => {
   try {
@@ -116,6 +122,7 @@ const getReviewFromResume = async (req, res, next) => {
  * @param {Object} req - The request object
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
+ * @author: @moncadaluisd
  */
 const showCurriculumPdfFromPath = async (req, res, next) => {
   try {
@@ -129,11 +136,29 @@ const showCurriculumPdfFromPath = async (req, res, next) => {
     handleApiError(res, error.stack, 500, error.message);
   }
 };
+
+/**
+ * Generate a review from a resume
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @author: @moncadaluisd
+ */
+const generateCurriculumReview = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const review = await generateCurriculumReviewService(id);
+    handleApi(res, review, 200, 'Curriculum review generated successfully');
+  } catch (error) {
+    handleApiError(res, error.stack, 500, error.message);
+  }
+};
 export {
   createCurriculum,
   getAllCurriculum,
   deleteCurriculum,
   getCurriculum,
   getReviewFromResume,
-  showCurriculumPdfFromPath
+  showCurriculumPdfFromPath,
+  generateCurriculumReview,
 };

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {  Command, SquareTerminal } from "lucide-react";
+import {  BookOpen, Command, Send, SquareTerminal } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -27,12 +27,12 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
     },
-    // {
-    //   title: "Curriculum",
-    //   url: "/curriculum",
-    //   icon: BookOpen,
-    //   isActive: true,
-    // },
+    {
+      title: "Curriculum",
+      url: "/curriculum",
+      icon: BookOpen,
+      isActive: true,
+    },
     // {
     //   title: "Aplications",
     //   url: "/applications",
@@ -52,11 +52,11 @@ const data = {
     //   url: "#",
     //   icon: LifeBuoy,
     // },
-    // {
-    //   title: "Feedback",
-    //   url: "#",
-    //   icon: Send,
-    // },
+    {
+      title: "Feedback",
+      url: "https://github.com/moncadaluisd/career-fy",
+      icon: Send,
+    },
   ],
   projects: [
     // {

@@ -8,6 +8,7 @@ export interface Curriculum {
     fileIdAi: string;
     data: string;
     description?: string;
+    curriculumReview: CurriculumReview[];
     createdAt: Date;
     updatedAt: Date;
     usedIn?: number;

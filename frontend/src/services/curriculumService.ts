@@ -1,6 +1,6 @@
 import { ResponseApi } from "@/interfaces/ResponseApi";
 import apiClient from "./apiClient";
-import { Curriculum } from "@/interfaces/Curriculum";
+import { Curriculum, CurriculumReview } from "@/interfaces/Curriculum";
 
 export const getCurriculums = async (): Promise<
   ResponseApi<Curriculum[] | []>
@@ -68,3 +68,11 @@ export const deleteCurriculum = async (
   return response.data;
 };
 
+export const generateCurriculumReview = async (
+  id: string
+): Promise<ResponseApi<CurriculumReview>> => {
+  const response = await apiClient.post<ResponseApi<CurriculumReview>>(
+    `/curriculums/${id}/review`
+  );
+  return response.data;
+};

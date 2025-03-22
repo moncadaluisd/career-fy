@@ -1,8 +1,8 @@
 import CircularLoader from "./circular-loading";
-
-export function LoaderContainer() {
+import { cn } from "@/lib/utils";
+export function LoaderContainer({ className }: { className?: string }) {
   return (
-    <div className="flex justify-center items-center">
+    <div className={cn("flex justify-center items-center", className)}>
       <CircularLoader />
     </div>
   );

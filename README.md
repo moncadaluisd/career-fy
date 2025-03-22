@@ -11,11 +11,12 @@ I developed this as a side project to help me find a job and also to learn how t
 - [X] Upload multiple resumes
 - [X] Create Cover Letter based on a resume and a job description
 - [X] Create a job offer manual
+- [X]  Suggestions to improve your resume
 - [ ] Create a job alert
 - [ ] Recomendations of jobs based on your curriculum
 - [ ] Chat with a AI to help you find a job
 - [ ] Get notified for new jobs based on your job alert
-- [ ]  Suggestions to improve your resume
+
 
 ## Tech Stack
 

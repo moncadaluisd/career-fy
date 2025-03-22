@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Building2, MoreHorizontal } from "lucide-react";
-import { Apply } from "@/interfaces/Apply";
+import { ArrowUpDown, FileText, MoreHorizontal } from "lucide-react";
+import { Curriculum } from "@/interfaces/Curriculum";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,14 +15,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTable } from "@/components/ui/data-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteApply, getApplies } from "@/services/appliesService";
-import { LoaderContainer } from "./loader-container";
+import { deleteCurriculum, getCurriculums } from "@/services/curriculumService";
+import { LoaderContainer } from "../loader-container";
 import { Link } from "react-router";
 import { toast } from "sonner";
 import React, { Suspense } from "react";
-import ModalManualJobOffer from "./modal-manual-job-offer";
 
-export const columns: ColumnDef<Apply>[] = [
+export const columns: ColumnDef<Curriculum>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -43,28 +42,6 @@ export const columns: ColumnDef<Apply>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "company",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Company
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-2">
-          <Building2 className="h-4 w-4 text-muted-foreground" />
-          <span>{row.getValue("company")}</span>
-        </div>
-      );
-    },
-  },
-  {
     accessorKey: "name",
     header: ({ column }) => {
       return (
@@ -72,9 +49,17 @@ export const columns: ColumnDef<Apply>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Position
+          Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <FileText className="h-4 w-4 text-muted-foreground" />
+          <span>{row.getValue("name")}</span>
+        </div>
       );
     },
   },
@@ -86,7 +71,7 @@ export const columns: ColumnDef<Apply>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Date Applied
+          Date Created
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -104,11 +89,11 @@ export const columns: ColumnDef<Apply>[] = [
       return (
         <Badge
           variant={
-            status === "Offer"
+            status === "Approved"
               ? "default"
               : status === "Rejected"
               ? "destructive"
-              : status === "Interview"
+              : status === "Reviewing"
               ? "outline"
               : "secondary"
           }
@@ -119,22 +104,30 @@ export const columns: ColumnDef<Apply>[] = [
     },
   },
   {
+    accessorKey: "usedIn",
+    header: "Used In",
+    cell: ({ row }) => {
+      const usedIn = row.getValue("usedIn") as number;
+      return <span>{usedIn || 0} application(s)</span>;
+    },
+  },
+  {
     id: "actions",
     cell: function ActionCell({ row }) {
       const queryClient = useQueryClient();
 
       const mutation = useMutation({
-        mutationFn: () => deleteApply(row.original._id as string),
+        mutationFn: () => deleteCurriculum(row.original._id as string),
         onSuccess: () => {
-          toast.success("Apply deleted");
-          queryClient.invalidateQueries({ queryKey: ["applies"] });
+          toast.success("Curriculum deleted");
+          queryClient.invalidateQueries({ queryKey: ["curriculums"] });
         },
         onError: () => {
-          toast.error("Error deleting apply");
+          toast.error("Error deleting curriculum");
         },
       });
 
-      const handleDeleteApply = () => {
+      const handleDeleteCurriculum = () => {
         mutation.mutate();
       };
 
@@ -150,11 +143,16 @@ export const columns: ColumnDef<Apply>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/apply/${row.original._id}`}>View Details</Link>
+              <Link to={`/curriculum/${row.original._id}`}>View Details</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <a href={row.original.path} target="_blank" rel="noopener noreferrer">
+                Download PDF
+              </a>
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-destructive"
-              onClick={handleDeleteApply}
+              onClick={handleDeleteCurriculum}
             >
               Delete
             </DropdownMenuItem>
@@ -165,31 +163,24 @@ export const columns: ColumnDef<Apply>[] = [
   },
 ];
 
-export function ApplicationsDataTable() {
+export function CurriculumDataTable() {
   const {
-    data: applies,
+    data: curriculums,
     isLoading,
     isError,
-    refetch,
   } = useQuery({
-    queryKey: ["applies"],
-    queryFn: getApplies,
+    queryKey: ["curriculums"],
+    queryFn: getCurriculums,
   });
 
   if (isLoading) return <LoaderContainer />;
-  if (isError) return <p>Error al cargar usuarios</p>;
+  if (isError) return <p>Error loading curriculums</p>;
 
   return (
     <React.Fragment>
-      <ModalManualJobOffer
-        onUploadSuccess={() => {
-          refetch();
-        }}
-      />
       <Suspense fallback={<LoaderContainer />}>
-        <DataTable columns={columns} data={applies as unknown as Apply[]} />
+        <DataTable columns={columns} data={curriculums?.data as unknown as Curriculum[]} />
       </Suspense>
     </React.Fragment>
   );
 }
-

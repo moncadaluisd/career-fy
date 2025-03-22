@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import { ApplicationsDataTable } from "@/components/aplications-data-table";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -9,6 +9,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { UrlInput } from "@/components/add-url-form";
 import { FadeOut } from "@/components/animations/fade-out";
 import { CreatingApply } from "@/components/creating-apply";
+import { LoaderContainer } from "@/components/loader-container";
 
 export default function Home() {
 
@@ -41,7 +42,9 @@ export default function Home() {
               <FadeOut isVisible={!isNewApply}>
                 <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
                   <div>
-                    <CurriculumManager />
+                    <Suspense fallback={<LoaderContainer />}>
+                      <CurriculumManager />
+                    </Suspense>
                   </div>
                   <div>
                     <h3 className="text-lg font-medium mb-4">
